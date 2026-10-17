@@ -6,9 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// RapidAPI anahtarını ortam değişkeninden al
+// Instagram Scraper Stable API
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || 'YOUR_RAPIDAPI_KEY_HERE';
-const RAPIDAPI_HOST = 'instagram-api1.p.rapidapi.com';
+const RAPIDAPI_HOST = 'instagram-scraper-api2.p.rapidapi.com';
 
 app.get('/', (req, res) => {
     res.json({ message: '✅ Instagram API çalışıyor!' });
@@ -33,7 +33,7 @@ app.get('/api/instagram/:username', async (req, res) => {
         };
 
         const response = await fetch(
-            `https://${RAPIDAPI_HOST}/user_info/${username}`,
+            `https://${RAPIDAPI_HOST}/v1/user_info?user_id=${username}`,
             options
         );
 
@@ -49,15 +49,14 @@ app.get('/api/instagram/:username', async (req, res) => {
 
         const profileData = {
             username: data.username || username,
-            full_name: data.full_name || data.name || '',
-            biography: data.biography || data.bio || '',
-            website: data.website || data.external_url || '',
+            full_name: data.full_name || '',
+            biography: data.biography || '',
             profile_pic_url: data.profile_pic_url || '',
-            profile_pic_url_hd: data.hd_profile_pic_url || data.profile_pic_url_hd || data.profile_pic_url || '',
+            profile_pic_url_hd: data.profile_pic_url || '',
             is_verified: data.is_verified || false,
-            followers: data.followers || data.follower_count || 0,
-            following: data.following || data.following_count || 0,
-            posts: data.posts || data.media_count || 0,
+            followers: data.followers || 0,
+            following: data.following || 0,
+            posts: data.posts || 0,
             is_private: data.is_private || false
         };
 
